@@ -37,7 +37,6 @@ kylin(麒麟)，一个跨语言的RPC框架
     <context:component-scan base-package="org.kylin.test"/>
 </beans>
 ```
-
 2. 使用@Provider发布服务
 ```
 @Provider
@@ -61,7 +60,6 @@ public class TestServiceImpl implements TestService {
     }
 }
 ```
-
 3. 使用@Consumer注入远程服务
 ```
 @Component
@@ -73,7 +71,6 @@ public class Client {
     ...
 }
 ```
-
 4. 运行
 ```
 public static void main(String[] args) throws Exception {
