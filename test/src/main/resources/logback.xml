@@ -1,0 +1,32 @@
+<configuration scan="true" scanPeriod="1 seconds">
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/tmp/rpc.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>console.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{35} - %msg %n</pattern>
+            <immediateFlush>${log.flush:-true}</immediateFlush>
+        </encoder>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="io.netty.handler.logging.LoggingHandler" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+
+</configuration>

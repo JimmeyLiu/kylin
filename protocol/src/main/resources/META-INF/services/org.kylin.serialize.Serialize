@@ -1,0 +1,3 @@
+org.kylin.serialize.JsonSerialize
+org.kylin.serialize.JavaSerialize
+org.kylin.serialize.MsgpackSerialize
