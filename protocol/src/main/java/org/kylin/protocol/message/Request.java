@@ -11,7 +11,7 @@ public class Request extends Message {
     String[] argTypes;
     Object[] args;
     Class<?> returnType;
-    int timeout = 10000;
+    int timeout = 1000;
     Map<String, String> context;
 
     public Request(int serializeType) {

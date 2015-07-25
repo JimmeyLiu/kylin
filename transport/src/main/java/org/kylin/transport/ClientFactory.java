@@ -1,5 +1,7 @@
 package org.kylin.transport;
 
+import org.kylin.protocol.address.Address;
+
 import java.net.URI;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  */
 public interface ClientFactory {
 
-    void create(URI uri, Client.Listener listener);
+    void create(Address address, Client.Listener listener);
 
     List<Client> listAll();
 

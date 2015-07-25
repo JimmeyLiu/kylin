@@ -2,6 +2,7 @@ package org.kylin.test.address;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.kylin.protocol.address.Address;
 import org.kylin.protocol.address.AddressService;
 import org.kylin.common.AsyncCallback;
 
@@ -43,17 +44,18 @@ public class LocalAddressService implements AddressService {
     }
 
     @Override
-    public void lookup(final String service, final String version, final AsyncCallback<Set<URI>> callback) {
+    public void lookup(final String service, final String version, final AsyncCallback<Set<Address>> callback) {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Set<URI> uris = new HashSet<URI>();
+                    Set<Address> uris = new HashSet<Address>();
                     List<String> list = IOUtils.readLines(new FileInputStream(file));
                     String key = service + "@" + version + ":";
                     for (String l : list) {
                         if (l.startsWith(key)) {
-                            uris.add(URI.create(l.replace(key, "tcp://")));
+                            Address address = new Address(l.substring(key.length()));
+                            uris.add(address);
                         }
                     }
                     callback.on(uris);
@@ -96,9 +98,9 @@ public class LocalAddressService implements AddressService {
         AddressService addressService = new LocalAddressService();
         addressService.register("org.jim.rpc.test.service.TestService", "1.0.0", "127.0.0.1:8999");
 
-        addressService.lookup("org.jim.rpc.test.service.TestService", "1.0.0", new AsyncCallback<Set<URI>>() {
+        addressService.lookup("org.jim.rpc.test.service.TestService", "1.0.0", new AsyncCallback<Set<Address>>() {
             @Override
-            public void on(Set<URI> uris) {
+            public void on(Set<Address> uris) {
                 System.out.println(uris);
             }
 

@@ -20,19 +20,6 @@ public abstract class MessageCodec<T extends Message> {
         response = new ResponseCodec();
     }
 
-    public static void main(String[] args) throws Exception {
-        Request request = new Request(1);
-        request.setMethod("test");
-        request.setService("fdsafdsa");
-        request.setMid(123);
-        MessageCodec codec = getCodec(Message.MessageType.REQUEST.ordinal());
-        Block block = codec.encode(request);
-        System.out.println(block);
-
-        Message message = codec.decode(block);
-        System.out.println(message);
-    }
-
     public static MessageCodec getCodec(int messageType) throws Exception {
         Message.MessageType type = Message.MessageType.parse(messageType);
         switch (type) {

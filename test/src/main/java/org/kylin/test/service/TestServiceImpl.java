@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by jimmey on 15-6-23.
  */
-@Provider
+@Provider(version = "")
 @Component
 public class TestServiceImpl implements TestService {
     @Override

@@ -366,6 +366,14 @@ public class ReflectUtils {
         return types;
     }
 
+    public static String[] getTypes(Object[] objects) {
+        String[] types = new String[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            types[i] = getDesc(objects[i].getClass());
+        }
+        return types;
+    }
+
 
     /**
      * get constructor desc.

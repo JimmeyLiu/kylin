@@ -18,6 +18,8 @@
         <module>netty</module>
         <module>bootstrap</module>
         <module>serialize</module>
+        <module>console</module>
+        <module>trace</module>
     </modules>
 
 

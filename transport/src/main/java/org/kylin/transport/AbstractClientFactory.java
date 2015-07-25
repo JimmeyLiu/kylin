@@ -1,6 +1,8 @@
 package org.kylin.transport;
 
 
+import org.kylin.protocol.address.Address;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +14,10 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class AbstractClientFactory implements ClientFactory {
 
-    ConcurrentMap<URI, Client> pool = new ConcurrentHashMap<URI, Client>();
+    ConcurrentMap<Address, Client> pool = new ConcurrentHashMap<Address, Client>();
 
     @Override
-    public void create(final URI uri, Client.Listener listener) {
+    public void create(final Address uri, Client.Listener listener) {
         Client client = pool.get(uri);
         if (client == null) {
             createClient(uri, new Client.Listener() {
@@ -32,7 +34,7 @@ public abstract class AbstractClientFactory implements ClientFactory {
         }
     }
 
-    protected abstract void createClient(URI uri, Client.Listener... listener);
+    protected abstract void createClient(Address uri, Client.Listener... listener);
 
     @Override
     public List<Client> listAll() {
@@ -41,6 +43,6 @@ public abstract class AbstractClientFactory implements ClientFactory {
 
     @Override
     public void remove(Client client) {
-        pool.remove(client.uri());
+        pool.remove(client.address());
     }
 }

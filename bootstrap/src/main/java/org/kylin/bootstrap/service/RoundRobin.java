@@ -1,7 +1,6 @@
 package org.kylin.bootstrap.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -9,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by jimmey on 15-6-22.
  */
 @SuppressWarnings("unchecked")
-public class RoundRobin<E> implements Iterator<E> {
+public class RoundRobin<E> {
 
     List<E> list;
     private E[] elements;
@@ -19,12 +18,9 @@ public class RoundRobin<E> implements Iterator<E> {
         this.elements = (E[]) list.toArray();
     }
 
-    @Override
-    public boolean hasNext() {
-        return true;
-    }
-
-    @Override
+    /**
+     * @return null if no element
+     */
     public E next() {
         if (elements.length == 0) {
             return null;
@@ -35,11 +31,6 @@ public class RoundRobin<E> implements Iterator<E> {
         }
         final int i = (int) (c % elements.length);
         return elements[i];
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
     }
 
     @Override

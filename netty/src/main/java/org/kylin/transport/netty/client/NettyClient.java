@@ -2,6 +2,7 @@ package org.kylin.transport.netty.client;
 
 import io.netty.channel.Channel;
 import org.kylin.common.log.RpcLogger;
+import org.kylin.protocol.address.Address;
 import org.kylin.transport.Client;
 import org.kylin.transport.TransportFuture;
 import org.slf4j.Logger;
@@ -16,11 +17,11 @@ public class NettyClient implements Client {
     Logger logger = RpcLogger.getLogger();
 
     Channel channel;
-    URI uri;
+    Address address;
 
-    public NettyClient(URI uri, Channel channel) {
+    public NettyClient(Address address, Channel channel) {
         this.channel = channel;
-        this.uri = uri;
+        this.address = address;
     }
 
     @Override
@@ -39,8 +40,7 @@ public class NettyClient implements Client {
     }
 
     @Override
-    public URI uri() {
-        return uri;
+    public Address address() {
+        return address;
     }
-
 }

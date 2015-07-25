@@ -4,8 +4,10 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import org.kylin.protocol.address.Address;
 import org.kylin.transport.AbstractClientFactory;
 import org.kylin.transport.Client;
 import org.kylin.transport.netty.handler.BlockCodecHandler;
@@ -20,16 +22,17 @@ import java.net.URI;
 public class NettyClientFactory extends AbstractClientFactory {
 
     @Override
-    protected void createClient(URI uri, final Client.Listener... listeners) {
+    protected void createClient(final Address address, final Client.Listener... listeners) {
+        URI uri = address.getUri();
         Bootstrap bootstrap = newBootstrap();
-        int connectTimeout = 4000;
-        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeout);
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, address.getConnectTimeout());
         bootstrap.channel(NioSocketChannel.class)
                 .group(new NioEventLoopGroup())
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
+                        pipeline.addLast(new IdleStateHandler(0, 0, address.getIdleTimeout()));
                         pipeline.addLast(new BlockCodecHandler());
                         pipeline.addLast(new MessageCodecHandler());
                         pipeline.addLast(new MessageHandler());
@@ -37,9 +40,9 @@ public class NettyClientFactory extends AbstractClientFactory {
                 });
 
         ChannelFuture future = bootstrap.connect(new InetSocketAddress(uri.getHost(), uri.getPort()));
-        if (future.awaitUninterruptibly(connectTimeout) && future.isSuccess() && future.channel().isActive()) {
+        if (future.awaitUninterruptibly(address.getConnectTimeout()) && future.isSuccess() && future.channel().isActive()) {
             Channel channel = future.channel();
-            final Client client = new NettyClient(uri, channel);
+            final Client client = new NettyClient(address, channel);
             for (Client.Listener l : listeners) {
                 l.onConnected(client);
             }

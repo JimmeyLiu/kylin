@@ -1,6 +1,6 @@
 package org.kylin.transport;
 
-import java.net.URI;
+import org.kylin.protocol.address.Address;
 
 /**
  * Created by jimmey on 15-6-23.
@@ -13,7 +13,7 @@ public interface Client {
 
     void close();
 
-    URI uri();
+    Address address();
 
     public interface Listener {
         void onConnected(Client client);

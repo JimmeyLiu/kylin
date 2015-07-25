@@ -15,7 +15,7 @@ public interface AddressService {
      */
     public int priority();
 
-    public void lookup(String service, String version, AsyncCallback<Set<URI>> callback);
+    public void lookup(String service, String version, AsyncCallback<Set<Address>> callback);
 
     public void register(String service, String version, String address);
 

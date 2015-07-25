@@ -1,5 +1,6 @@
 package org.kylin.bootstrap.service;
 
+import org.kylin.protocol.address.Address;
 import org.kylin.protocol.address.AddressFactory;
 import org.kylin.protocol.address.AddressNotFoundException;
 import org.kylin.protocol.address.AddressService;
@@ -9,6 +10,8 @@ import org.kylin.protocol.message.Mid;
 import org.kylin.protocol.message.Request;
 import org.kylin.protocol.message.Response;
 import org.kylin.serialize.SerializeFactory;
+import org.kylin.trace.ResultCode;
+import org.kylin.trace.Trace;
 import org.kylin.transport.Client;
 import org.kylin.transport.ClientFactory;
 import org.kylin.transport.ClientFactoryProvider;
@@ -17,6 +20,9 @@ import org.kylin.transport.TransportFuture;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -48,17 +54,18 @@ public class ServiceProxy implements InvocationHandler {
                 roundRobin.remove(client);
             }
         };
-        addressService.lookup(service, version, new AsyncCallback<Set<URI>>() {
+        addressService.lookup(service, version, new AsyncCallback<Set<Address>>() {
             @Override
-            public void on(Set<URI> strings) {
+            public void on(Set<Address> strings) {
+                List<Address> list = new ArrayList<Address>(strings);
                 for (Client t : roundRobin.getElements()) {
-                    if (strings.contains(t.uri())) {
-                        strings.remove(t.uri());
+                    if (list.contains(t.address())) {
+                        list.remove(t.address());
                     } else {
                         t.close();
                     }
                 }
-                for (URI address : strings) {
+                for (Address address : strings) {
                     if (clientFactory != null) {
                         clientFactory.create(address, listener);
                     }
@@ -74,29 +81,39 @@ public class ServiceProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, final Method method, Object[] args) throws Throwable {
-        Client client = roundRobin.next();
-        if (client == null) {
-            throw new AddressNotFoundException(service + "." + method.getName() + "@" + version);
-        }
-        final int serializeType = 1;
-        Request request = new Request(serializeType);
-        request.setMid(Mid.next());
-        request.setService(service);
-        request.setMethod(method.getName());
-        request.setArgTypes(ReflectUtils.getArgTypes(method.getParameterTypes()));
-        request.setArgs(args);
+        Trace.startRpc();
+        ResultCode code = ResultCode.OK;
+        try {
+            Client client = roundRobin.next();
+            if (client == null) {
+                throw new AddressNotFoundException(service + "." + method.getName() + "@" + version);
+            }
 
-        TransportFuture future = TransportFuture.create(request);
-        client.doAsk(future);
-        Response response = future.get();
-        if (response.getException() != null) {
-            throw new Exception("Invoke error " + response.getException());
+            Request request = new Request(client.address().getSerializeType());
+            request.setMid(Mid.next());
+            request.setService(service);
+            request.setMethod(method.getName());
+            request.setArgTypes(ReflectUtils.getArgTypes(method.getParameterTypes()));
+            request.setArgs(args);
+
+
+            TransportFuture future = TransportFuture.create(request);
+            client.doAsk(future);
+            Response response = future.get();
+            if (response.getException() != null) {
+                throw new Exception("Invoke error " + response.getException());
+            }
+            byte[] result = response.getResultBytes();
+            if (result != null && result.length > 0) {
+                return SerializeFactory.deserialize(response.getSerializeType(), result, method.getReturnType());
+            }
+            return null;
+        } catch (Throwable e) {
+            code = ResultCode.ERROR;
+            throw e;
+        } finally {
+            Trace.end(code);
         }
-        byte[] result = response.getResultBytes();
-        if (result != null && result.length > 0) {
-            return SerializeFactory.deserialize(response.getSerializeType(), result, method.getReturnType());
-        }
-        return null;
     }
 
 }

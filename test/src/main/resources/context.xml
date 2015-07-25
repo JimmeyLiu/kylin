@@ -9,5 +9,14 @@
     http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context.xsd">
     <bean class="org.kylin.bootstrap.SpringBootstrap"/>
+    <bean class="org.kylin.bootstrap.service.ServiceBean">
+        <property name="service" value=""/>
+        <property name="version" value=""/>
+        <property name="methodTimeout">
+            <map>
+                <entry key="hello" value="20000"/>
+            </map>
+        </property>
+    </bean>
     <context:component-scan base-package="org.kylin.test"/>
 </beans>

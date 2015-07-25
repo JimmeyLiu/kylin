@@ -1,6 +1,7 @@
 package org.kylin.transport;
 
 import org.kylin.common.guava.concurrent.AbstractFuture;
+import org.kylin.common.log.RpcLogger;
 import org.kylin.protocol.message.Request;
 import org.kylin.protocol.message.Response;
 
@@ -28,6 +29,7 @@ public class TransportFuture extends AbstractFuture<Response> {
         try {
             return super.get(request.getTimeout(), TimeUnit.MILLISECONDS);
         } catch (TimeoutException e) {
+            RpcLogger.getLogger().error("request timeout {}", request.getTimeout());
             Response response = new Response(request.getSerializeType());
             response.setException("request timeout");
             return response;
