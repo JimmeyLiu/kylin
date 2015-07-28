@@ -16,10 +16,11 @@
         <module>spring</module>
         <module>test</module>
         <module>netty</module>
-        <module>bootstrap</module>
         <module>serialize</module>
+        <module>processor</module>
         <module>console</module>
         <module>trace</module>
+        <module>config</module>
     </modules>
 
 

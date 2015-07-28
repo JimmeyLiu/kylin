@@ -1,16 +1,21 @@
 package org.kylin.serialize;
 
 import org.msgpack.MessagePack;
+import org.msgpack.template.Template;
+import org.msgpack.template.Templates;
+
+import java.util.Map;
 
 /**
  * Created by jimmey on 15-6-22.
  */
 public class MsgpackSerialize implements Serialize {
-
     MessagePack pack;
 
+    @SuppressWarnings("unchecked")
     public MsgpackSerialize() {
         pack = new MessagePack();
+        pack.register(Map.class, (Template) Templates.tMap(Templates.TString, Templates.TString));
     }
 
     @Override

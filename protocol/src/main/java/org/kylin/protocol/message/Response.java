@@ -30,6 +30,11 @@ public class Response extends Message {
         this.status = status;
     }
 
+    public void setStatus(StatusCode statusCode) {
+        this.status = statusCode.code;
+
+    }
+
     public Object getResult() {
         return result;
     }

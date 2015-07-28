@@ -15,15 +15,23 @@ public class Client {
     @Consumer
     TestService testService;
 
-    public void invoke() {
+    public void invoke() throws Exception {
         TestModel testModel = new TestModel();
-        testModel.setName("fdsa");
+        testModel.setName("的撒范德萨发");
         testModel.setAge(1234324);
         testModel.setTime(1111111);
         System.out.println(testService.hello(testModel).getResult());
+
+        for (int i = 10; i < 2000; i++) {
+            testModel.setAge(i);
+            System.out.println(testService.hello(testModel).getResult());
+            Thread.sleep(2000);
+        }
+
     }
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("kylin.appName", "TestAppName1");
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
         Thread.sleep(1000);
         Client client = (Client) context.getBean("client");

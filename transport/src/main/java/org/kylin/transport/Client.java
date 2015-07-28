@@ -1,6 +1,6 @@
 package org.kylin.transport;
 
-import org.kylin.protocol.address.Address;
+import org.kylin.address.Address;
 
 /**
  * Created by jimmey on 15-6-23.
@@ -19,6 +19,8 @@ public interface Client {
         void onConnected(Client client);
 
         void onClosed(Client client);
+
+        void onServerOffline(Client client);
     }
 
 }

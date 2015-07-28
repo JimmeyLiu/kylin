@@ -2,12 +2,10 @@ package org.kylin.transport.netty.client;
 
 import io.netty.channel.Channel;
 import org.kylin.common.log.RpcLogger;
-import org.kylin.protocol.address.Address;
+import org.kylin.address.Address;
 import org.kylin.transport.Client;
 import org.kylin.transport.TransportFuture;
 import org.slf4j.Logger;
-
-import java.net.URI;
 
 /**
  * Created by jimmey on 15-6-25.

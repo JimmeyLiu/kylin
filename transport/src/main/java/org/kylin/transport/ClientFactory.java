@@ -1,8 +1,7 @@
 package org.kylin.transport;
 
-import org.kylin.protocol.address.Address;
+import org.kylin.address.Address;
 
-import java.net.URI;
 import java.util.List;
 
 /**

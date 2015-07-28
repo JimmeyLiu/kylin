@@ -8,6 +8,7 @@ import org.kylin.serialize.SerializeFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.util.Map;
 
 /**
  * Created by jimmey on 15-6-23.
@@ -16,7 +17,7 @@ public class RequestCodec extends MessageCodec<Request> {
     @Override
     protected byte[] encodePayload(Request message) throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] serviceBytes = SerializeFactory.serialize(message.getSerializeType(), message.getService());
+        byte[] serviceBytes = SerializeFactory.serialize(message.getSerializeType(), message.getServiceKey());
         writeBytesLength(out, serviceBytes);
         byte[] methodBytes = SerializeFactory.serialize(message.getSerializeType(), message.getMethod());
         writeBytesLength(out, methodBytes);
@@ -34,6 +35,12 @@ public class RequestCodec extends MessageCodec<Request> {
                 writeBytesLength(out, argi);
             }
         }
+        byte[] ctxBytes = EMPTY;
+        Map<String, String> ctx = message.getContext();
+        if (ctx != null) {
+            ctxBytes = SerializeFactory.serialize(message.getSerializeType(), ctx);
+        }
+        writeBytesLength(out, ctxBytes);
 
         return out.toByteArray();
     }
@@ -43,6 +50,7 @@ public class RequestCodec extends MessageCodec<Request> {
         return new Request(serializeType);
     }
 
+    @SuppressWarnings("all")
     @Override
     protected void decodePayload(Request request, byte[] payload) throws Exception {
         ByteArrayInputStream in = new ByteArrayInputStream(payload);
@@ -51,7 +59,7 @@ public class RequestCodec extends MessageCodec<Request> {
         String service = SerializeFactory.deserialize(serializeType, readLengthBytes(data), String.class);
         String method = SerializeFactory.deserialize(serializeType, readLengthBytes(data), String.class);
 
-        request.setService(service);
+        request.setServiceKey(service);
         request.setMethod(method);
 
         byte[] argTypeBytes = readLengthBytes(data);
@@ -66,6 +74,10 @@ public class RequestCodec extends MessageCodec<Request> {
             request.setArgs(args);
         }
 
-
+        byte[] ctxBytes = readLengthBytes(data);
+        if (ctxBytes.length > 0) {
+            Map<String, String> ctx = SerializeFactory.deserialize(serializeType, ctxBytes, Map.class);
+            request.setContext(ctx);
+        }
     }
 }

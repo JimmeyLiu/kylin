@@ -6,7 +6,7 @@ package org.kylin.protocol.message;
 public abstract class Message {
 
     public enum MessageType {
-        HELLO_REQUEST, HELLO_RESPONSE, REQUEST, RESPONSE;
+        REQUEST, RESPONSE, CONTROL;
 
         public static MessageType parse(int type) {
             return values()[type];

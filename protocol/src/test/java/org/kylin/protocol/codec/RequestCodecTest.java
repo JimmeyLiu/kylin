@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.Before;
-import org.junit.After;
 import org.kylin.common.util.ReflectUtils;
 import org.kylin.protocol.message.Request;
 
@@ -27,7 +26,7 @@ public class RequestCodecTest {
     @Before
     public void before() throws Exception {
         request = new Request(1);
-        request.setService("hello");
+        request.setServiceKey("hello");
         request.setMethod("say");
         request.setArgTypes(ReflectUtils.getTypes(args));
         request.setArgs(args);
@@ -37,7 +36,7 @@ public class RequestCodecTest {
     public void codec() throws Exception {
         Block block = codec.encode(request);
         Request r = codec.decode(block);
-        assertEquals(r.getService(), request.getService());
+        assertEquals(r.getServiceKey(), request.getServiceKey());
         assertEquals(r.getMethod(), request.getMethod());
         assertArrayEquals(r.getArgTypes(), request.getArgTypes());
         assertArrayEquals(r.getArgs(), request.getArgs());

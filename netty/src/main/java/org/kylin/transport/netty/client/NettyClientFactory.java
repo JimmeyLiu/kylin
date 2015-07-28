@@ -7,7 +7,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import org.kylin.protocol.address.Address;
+import org.kylin.address.Address;
 import org.kylin.transport.AbstractClientFactory;
 import org.kylin.transport.Client;
 import org.kylin.transport.netty.handler.BlockCodecHandler;
@@ -32,10 +32,10 @@ public class NettyClientFactory extends AbstractClientFactory {
                     @Override
                     protected void initChannel(Channel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new IdleStateHandler(0, 0, address.getIdleTimeout()));
+//                        pipeline.addLast(new IdleStateHandler(0, 0, address.getIdleTimeout()));
                         pipeline.addLast(new BlockCodecHandler());
                         pipeline.addLast(new MessageCodecHandler());
-                        pipeline.addLast(new MessageHandler());
+                        pipeline.addLast(new MessageHandler(listeners));
                     }
                 });
 
@@ -43,9 +43,11 @@ public class NettyClientFactory extends AbstractClientFactory {
         if (future.awaitUninterruptibly(address.getConnectTimeout()) && future.isSuccess() && future.channel().isActive()) {
             Channel channel = future.channel();
             final Client client = new NettyClient(address, channel);
+            channel.attr(Attrs.CLIENT_ATTRIBUTE_KEY).set(client);
             for (Client.Listener l : listeners) {
                 l.onConnected(client);
             }
+
             channel.closeFuture().addListener(new GenericFutureListener<Future<Void>>() {
                 @Override
                 public void operationComplete(Future<Void> future) throws Exception {
@@ -54,6 +56,7 @@ public class NettyClientFactory extends AbstractClientFactory {
                     }
                 }
             });
+
         } else {
             future.cancel(true);
             future.channel().close();

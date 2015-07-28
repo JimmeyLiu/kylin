@@ -1,12 +1,13 @@
 package org.kylin.protocol.message;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by jimmey on 15-6-20.
  */
 public class Request extends Message {
-    String service;
+    String serviceKey;
     String method;
     String[] argTypes;
     Object[] args;
@@ -18,12 +19,12 @@ public class Request extends Message {
         super(MessageType.REQUEST, serializeType);
     }
 
-    public String getService() {
-        return service;
+    public String getServiceKey() {
+        return serviceKey;
     }
 
-    public void setService(String service) {
-        this.service = service;
+    public void setServiceKey(String serviceKey) {
+        this.serviceKey = serviceKey;
     }
 
     public String getMethod() {
@@ -72,5 +73,12 @@ public class Request extends Message {
 
     public void setContext(Map<String, String> context) {
         this.context = context;
+    }
+
+    public void putContext(String key, String value) {
+        if (context == null) {
+            context = new HashMap<String, String>();
+        }
+        context.put(key, value);
     }
 }

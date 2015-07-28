@@ -15,6 +15,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 public @interface Provider {
 
-    String version() default "";
+    String version() default "1.0.0";
 
 }

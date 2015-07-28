@@ -1,9 +1,8 @@
 package org.kylin.transport;
 
 
-import org.kylin.protocol.address.Address;
+import org.kylin.address.Address;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +29,14 @@ public abstract class AbstractClientFactory implements ClientFactory {
                 public void onClosed(Client client) {
                     remove(client);
                 }
+
+                @Override
+                public void onServerOffline(Client client) {
+                    //ignore
+                }
             }, listener);
+        } else {
+
         }
     }
 

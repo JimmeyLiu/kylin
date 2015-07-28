@@ -10,6 +10,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.kylin.common.log.RpcLogger;
+import org.kylin.common.util.Config;
 import org.kylin.protocol.processor.RPCProcessor;
 import org.kylin.transport.Server;
 import org.kylin.transport.netty.handler.BlockCodecHandler;
@@ -23,12 +24,17 @@ import java.net.InetSocketAddress;
  */
 public class NettyServer implements Server {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(0, new DefaultThreadFactory("RPC-BOSS"));
-    private final EventLoopGroup workerGroup = new NioEventLoopGroup(Integer.valueOf(System.getProperty("io.workers", Runtime.getRuntime().availableProcessors() * 2 + "")), new DefaultThreadFactory("RPC-WORKER"));
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup(Config.getIoWorkers(), new DefaultThreadFactory("RPC-WORKER"));
     Logger logger = RpcLogger.getLogger();
     RPCProcessor processor;
 
     public NettyServer(RPCProcessor processor) {
         this.processor = processor;
+    }
+
+    @Override
+    public void close() {
+
     }
 
     @Override
@@ -74,7 +80,7 @@ public class NettyServer implements Server {
                     }
                 }
             } catch (Exception e) {
-
+                logger.error("start netty server error", e);
             }
         }
     }

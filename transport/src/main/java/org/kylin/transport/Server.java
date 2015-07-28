@@ -7,4 +7,5 @@ public interface Server {
 
     void listen(String host, int port);
 
+    void close();
 }
