@@ -56,7 +56,7 @@ public class RpcHandler extends SimpleChannelInboundHandler<Object> {
                 uri = uri.substring(0, i);
             }
             String[] v = uri.split("/");
-            if (v.length < 4) {
+            if (v.length < 4 || v.length > 5) {
                 errorResponse(StatusCode.REST_BAD_REQUEST, ctx);
                 return;
             }
@@ -113,9 +113,7 @@ public class RpcHandler extends SimpleChannelInboundHandler<Object> {
     private void writeResponse(Response response, ChannelHandlerContext ctx) {
         RpcResponse rpcResponse = new RpcResponse(response.getStatus(), response.getException(), response.getResult());
         ByteBuf byteBuf = Unpooled.copiedBuffer(JSON.toJSONBytes(rpcResponse));
-        FullHttpResponse httpResponse = new DefaultFullHttpResponse(HTTP_1_1,
-                response.getStatus() == StatusCode.OK.code ? OK : BAD_REQUEST,
-                byteBuf);
+        FullHttpResponse httpResponse = new DefaultFullHttpResponse(HTTP_1_1, OK, byteBuf);
         HttpHeaders.addHeader(httpResponse, CONTENT_TYPE, CONTENT_JSON);
         HttpHeaders.addHeader(httpResponse, CONTENT_LENGTH, httpResponse.content().readableBytes());
         if (!HttpHeaders.isKeepAlive(httpRequest)) {

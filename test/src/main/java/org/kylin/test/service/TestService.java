@@ -3,7 +3,7 @@ package org.kylin.test.service;
 /**
  * Created by jimmey on 15-6-23.
  */
-public interface TestService {
+public interface TestService extends BaseService {
 
     public ResultModel say();
 

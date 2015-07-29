@@ -4,6 +4,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.logging.LogLevel;
@@ -48,11 +49,9 @@ public class RestfulServer implements Server {
                     protected void initChannel(Channel ch) throws Exception {
                         ChannelPipeline p = ch.pipeline();
                         p.addLast(new HttpRequestDecoder());
-                        // Uncomment the following line if you don't want to handle HttpChunks.
-                        //p.addLast(new HttpObjectAggregator(1048576));
+                        //不支持 chunk 传输
+                        p.addLast(new HttpObjectAggregator(1048576));
                         p.addLast(new HttpResponseEncoder());
-                        // Remove the following line if you don't want automatic content compression.
-                        //p.addLast(new HttpContentCompressor());
                         p.addLast(new RpcHandler(processor));
                     }
                 });

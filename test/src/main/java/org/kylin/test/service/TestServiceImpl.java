@@ -18,6 +18,11 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
+    public void haha() {
+
+    }
+
+    @Override
     public long say(int i, long j) {
         return i + j;
     }
