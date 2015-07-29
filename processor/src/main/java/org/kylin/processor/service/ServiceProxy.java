@@ -49,7 +49,7 @@ public class ServiceProxy implements InvocationHandler {
             client.doAsk(future);
             Response response = future.get();
             if (response.getStatus() != StatusCode.OK.code) {
-                throw new Exception(response.getException());
+                throw new KylinException(response.getStatus(), response.getException());
             }
             byte[] result = response.getResultBytes();
             if (result != null && result.length > 0) {

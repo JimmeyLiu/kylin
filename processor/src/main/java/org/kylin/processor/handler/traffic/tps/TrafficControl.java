@@ -42,10 +42,6 @@ public class TrafficControl {
 
     private volatile double leftDouble;
 
-    public TrafficControl() {
-        this(DEFAULT_RATE, DEFAULT_PEAK, DEFAULT_TIME_WINDOW);
-    }
-
     public TrafficControl(int rate, int peak, int timeWindow) {
         this.rate = rate;
         this.peak = peak;
@@ -107,26 +103,6 @@ public class TrafficControl {
     public String toString() {
         return "TrafficControl [tokens=" + tokens + ", rate=" + rate + ", peak=" + peak + ", timeWindow="
                 + timeWindow + "]";
-    }
-
-    /**
-     * 限流器有效性验证。限流器的配置必须满足以下条件：
-     * <ol>
-     * <li>速率rate、峰值peak配置为大于0
-     * <li>时间窗timeWindow不小于1
-     * <li>峰值不小于速率与时间窗的乘积
-     * </ol>
-     *
-     * @return true/false
-     */
-    public boolean validate() {
-        if (rate <= 0 || peak <= 0 || timeWindow < 1) {
-            return false;
-        }
-        if (peak < (rate * timeWindow / 1000F)) {
-            return false;
-        }
-        return true;
     }
 
 }

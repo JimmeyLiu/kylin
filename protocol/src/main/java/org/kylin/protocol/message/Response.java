@@ -32,6 +32,9 @@ public class Response extends Message {
 
     public void setStatus(StatusCode statusCode) {
         this.status = statusCode.code;
+        if (statusCode != StatusCode.OK) {
+            this.exception = statusCode.message;
+        }
     }
 
     public Object getResult() {

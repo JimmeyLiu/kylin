@@ -1,5 +1,6 @@
 package org.kylin.test;
 
+import org.kylin.processor.service.KylinException;
 import org.kylin.spring.Consumer;
 import org.kylin.test.service.TestModel;
 import org.kylin.test.service.TestService;
@@ -26,7 +27,8 @@ public class Client {
             try {
                 testModel.setAge(i);
                 System.out.println(testService.hello(testModel).getResult());
-            } catch (Exception e) {
+            } catch (KylinException e) {
+                System.out.println(e.getCode() + " " + e.getMessage());
             }
             Thread.sleep(500);
         }
