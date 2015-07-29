@@ -4,7 +4,7 @@
  * www.taobao.com
  *  (C) 淘宝(中国) 2003-2014
  */
-package org.kylin.processor.handler.tps.rule;
+package org.kylin.processor.handler.traffic.tps;
 
 
 import org.kylin.common.log.RpcLogger;
@@ -13,17 +13,15 @@ import org.slf4j.Logger;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 描述：线程安全的令牌桶限流器，时间窗刷新误差为毫秒级。 定义有效的限流器需要满足：
  * <ol>
  * <li>速率rate > 0，单位为次数/秒
  * <li>时间窗timeWindow >= 1，单位为毫秒
  * <li>峰值peak >= rate * timeWindow / 1000.0
  * </ol>
- *
- * @author yijiang
- * @since 1.4.8.3
+ * <p/>
+ * 流量控制组件
  */
-public class TokenBucketLimiter {
+public class TrafficControl {
     static private final Logger logger = RpcLogger.getLogger();
 
     private static final int DEFAULT_RATE = 50;
@@ -44,11 +42,11 @@ public class TokenBucketLimiter {
 
     private volatile double leftDouble;
 
-    public TokenBucketLimiter() {
+    public TrafficControl() {
         this(DEFAULT_RATE, DEFAULT_PEAK, DEFAULT_TIME_WINDOW);
     }
 
-    public TokenBucketLimiter(int rate, int peak, int timeWindow) {
+    public TrafficControl(int rate, int peak, int timeWindow) {
         this.rate = rate;
         this.peak = peak;
         this.timeWindow = timeWindow;
@@ -83,7 +81,7 @@ public class TokenBucketLimiter {
                     lastRefreshTime = now;
                     leftDouble = addedPlusDouble - addPlus;
                     if (logger.isDebugEnabled()) {
-                        logger.debug("[TokenBucketLimiter] Updated done: [{}] -> [{}], refresh time: {}.", currentValue, newValue, now);
+                        logger.debug("[TrafficControl] Updated done: [{}] -> [{}], refresh time: {}.", currentValue, newValue, now);
                     }
                 }
             }
@@ -99,7 +97,7 @@ public class TokenBucketLimiter {
 
         if (logger.isDebugEnabled()) {
             if (!flag) {
-                logger.debug("TokenBucketLimiter: get token failed, tokens[" + tokens.get() + "]");
+                logger.debug("TrafficControl: get token failed, tokens[" + tokens.get() + "]");
             }
         }
         return flag;
@@ -107,7 +105,7 @@ public class TokenBucketLimiter {
 
     @Override
     public String toString() {
-        return "TokenBucketLimiter [tokens=" + tokens + ", rate=" + rate + ", peak=" + peak + ", timeWindow="
+        return "TrafficControl [tokens=" + tokens + ", rate=" + rate + ", peak=" + peak + ", timeWindow="
                 + timeWindow + "]";
     }
 

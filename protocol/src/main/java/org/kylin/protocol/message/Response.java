@@ -32,7 +32,6 @@ public class Response extends Message {
 
     public void setStatus(StatusCode statusCode) {
         this.status = statusCode.code;
-
     }
 
     public Object getResult() {

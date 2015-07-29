@@ -1,9 +1,13 @@
 package org.kylin.processor.handler;
 
-import org.kylin.processor.handler.tps.TpsHandler;
+import org.kylin.common.log.RpcLogger;
+import org.kylin.common.util.RequestCtxUtil;
+import org.kylin.processor.handler.traffic.TrafficHandler;
 import org.kylin.protocol.message.Request;
 import org.kylin.protocol.message.Response;
+import org.kylin.protocol.message.StatusCode;
 import org.kylin.protocol.processor.RPCProcessor;
+import org.slf4j.Logger;
 
 /**
  * Created by jimmey on 15-6-23.
@@ -11,10 +15,11 @@ import org.kylin.protocol.processor.RPCProcessor;
 public class RPCProcessorImpl implements RPCProcessor {
 
     RequestHandler[] handlers;
+    Logger logger = RpcLogger.getLogger();
 
     public RPCProcessorImpl() {
         handlers = new RequestHandler[]{
-                new TpsHandler(),//tps control
+                new TrafficHandler(),//tps control
                 new InvokeHandler()//real invoke
         };
     }
@@ -23,21 +28,20 @@ public class RPCProcessorImpl implements RPCProcessor {
     public void process(Request request, Callback callback) {
         Response response = new Response(request.getSerializeType());
         response.setMid(request.getMid());
-        response.setStatus(0);
-        long start = System.currentTimeMillis();
+        response.setStatus(StatusCode.TRYING);
         try {
             for (RequestHandler handler : handlers) {
                 handler.handle(request, response);
-                if (response.getStatus() > 0) {
+                if (response.getStatus() != StatusCode.TRYING.code) {
                     break;
                 }
             }
         } catch (Exception e) {
-            response.setStatus(500);
+            logger.error(String.format("Handle %s.%s Error", request.getServiceKey(), request.getMethod()), e);
+            response.setStatus(StatusCode.SERVER_ERROR);
             response.setException(e.getMessage());
         } finally {
             callback.on(response);
-            long rt = System.currentTimeMillis() - start;
         }
     }
 

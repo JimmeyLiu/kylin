@@ -23,9 +23,12 @@ public class Client {
         System.out.println(testService.hello(testModel).getResult());
 
         for (int i = 10; i < 2000; i++) {
-            testModel.setAge(i);
-            System.out.println(testService.hello(testModel).getResult());
-            Thread.sleep(2000);
+            try {
+                testModel.setAge(i);
+                System.out.println(testService.hello(testModel).getResult());
+            } catch (Exception e) {
+            }
+            Thread.sleep(500);
         }
 
     }

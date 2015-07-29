@@ -52,7 +52,7 @@ public class NettyServer implements Server {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
+//                        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
                         pipeline.addLast("codec", new BlockCodecHandler());
                         pipeline.addLast("message", new MessageCodecHandler());
                         pipeline.addLast("handler", new MessageHandler(processor));
