@@ -5,6 +5,8 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
@@ -19,7 +21,6 @@ import org.kylin.protocol.processor.RPCProcessor;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
@@ -30,8 +31,8 @@ public class RpcHandler extends SimpleChannelInboundHandler<Object> {
     static String CONTENT_TYPE = "Content-Type";
     static String CONTENT_LENGTH = "Content-Length";
     static String CONNECTION = "Connection";
-    static String CONTENT_JSON = "application/json";
-    static String CLOSE = "Close";
+    static String CONTENT_JSON = "application/json; charset=UTF-8";
+    static String KEEP_ALIVE = "Keep-Alive";
 
     static String[] EMPTY_TYPES = new String[0];
     static Object[] EMPTY_ARGS = new Object[0];
@@ -115,10 +116,14 @@ public class RpcHandler extends SimpleChannelInboundHandler<Object> {
         ByteBuf byteBuf = Unpooled.copiedBuffer(JSON.toJSONBytes(rpcResponse));
         FullHttpResponse httpResponse = new DefaultFullHttpResponse(HTTP_1_1, OK, byteBuf);
         HttpHeaders.addHeader(httpResponse, CONTENT_TYPE, CONTENT_JSON);
-        HttpHeaders.addHeader(httpResponse, CONTENT_LENGTH, httpResponse.content().readableBytes());
-        if (!HttpHeaders.isKeepAlive(httpRequest)) {
-            HttpHeaders.addHeader(httpResponse, CONNECTION, CLOSE);
+        boolean keepAlive = HttpHeaders.isKeepAlive(httpRequest);
+        if (keepAlive) {
+            HttpHeaders.addHeader(httpResponse, CONTENT_LENGTH, httpResponse.content().readableBytes());
+            HttpHeaders.addHeader(httpResponse, CONNECTION, KEEP_ALIVE);
         }
-        ctx.writeAndFlush(httpResponse);
+        ChannelFuture future = ctx.writeAndFlush(httpResponse);
+        if (!keepAlive) {
+            future.addListener(ChannelFutureListener.CLOSE);
+        }
     }
 }
