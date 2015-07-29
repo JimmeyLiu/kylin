@@ -7,6 +7,7 @@ import org.kylin.common.util.RequestCtxUtil;
 import org.kylin.protocol.message.Control;
 import org.kylin.protocol.message.Request;
 import org.kylin.protocol.message.Response;
+import org.kylin.protocol.message.StatusCode;
 import org.kylin.transport.Client;
 import org.kylin.transport.TransportFuture;
 import org.slf4j.Logger;
@@ -72,7 +73,8 @@ public class MessageHandler extends ChannelDuplexHandler {
                 if (channelFuture.isSuccess()) {
                     pending.put(req.getMid(), future);
                 } else {
-                    Response response = Response.errorResponse(req.getSerializeType(), 600, channelFuture.cause().getMessage());
+                    channelFuture.cause().printStackTrace();
+                    Response response = Response.errorResponse(req.getSerializeType(), StatusCode.CLIENT_SEND_ERROR);
                     future.set(response);
                     if (!ctx.channel().isActive()) {
 //                        factory.remove(ctx.channel());

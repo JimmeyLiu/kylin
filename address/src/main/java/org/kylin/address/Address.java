@@ -63,9 +63,33 @@ public class Address {
             if (serialize != null) {
                 String[] types = StringUtils.split(serialize, ',');
             }
-            tmp.serializeType = 1;
+            tmp.serializeType = 0;
         }
         return tmp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+
+        Address address = (Address) o;
+
+        if (connectTimeout != address.connectTimeout) return false;
+        if (idleTimeout != address.idleTimeout) return false;
+        if (serializeType != address.serializeType) return false;
+        if (uri != null ? !uri.equals(address.uri) : address.uri != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = serializeType;
+        result = 31 * result + (uri != null ? uri.hashCode() : 0);
+        result = 31 * result + idleTimeout;
+        result = 31 * result + connectTimeout;
+        return result;
     }
 
     @Override

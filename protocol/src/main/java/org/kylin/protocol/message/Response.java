@@ -15,10 +15,9 @@ public class Response extends Message {
         super(MessageType.RESPONSE, serializeType);
     }
 
-    public static Response errorResponse(int serializeType, int status, String exception) {
+    public static Response errorResponse(int serializeType, StatusCode statusCode) {
         Response response = new Response(serializeType);
-        response.setStatus(status);
-        response.setException(exception);
+        response.setStatus(statusCode);
         return response;
     }
 

@@ -15,4 +15,5 @@ public interface ClientFactory {
 
     void remove(Client client);
 
+    Client create(Address address);
 }

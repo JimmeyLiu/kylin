@@ -40,7 +40,6 @@ public class TestServiceImpl implements TestService {
     @Override
     public ResultModel hello(TestModel testModel) {
         ResultModel resultModel = new ResultModel();
-        System.out.println("request from " + RequestCtxUtil.getClientAppName() + " " + RequestCtxUtil.getClientIp());
         resultModel.setResult("hello " + testModel.getName() + " age " + testModel.getAge() + " time " + testModel.getTime());
         return resultModel;
     }

@@ -1,7 +1,9 @@
 package org.kylin.processor.service;
 
+import org.kylin.address.Address;
 import org.kylin.address.AddressNotFoundException;
 import org.kylin.common.util.ReflectUtils;
+import org.kylin.common.util.RequestCtxUtil;
 import org.kylin.protocol.message.Mid;
 import org.kylin.protocol.message.Request;
 import org.kylin.protocol.message.Response;
@@ -10,6 +12,7 @@ import org.kylin.serialize.SerializeFactory;
 import org.kylin.trace.ResultCode;
 import org.kylin.trace.Trace;
 import org.kylin.transport.Client;
+import org.kylin.transport.ClientFactoryProvider;
 import org.kylin.transport.TransportFuture;
 
 import java.lang.reflect.InvocationHandler;
@@ -22,6 +25,7 @@ public class ServiceProxy implements InvocationHandler {
 
     String serviceKey;
     ServiceDiscovery serviceDiscovery;
+    static final Object[] EMPTY = new Object[0];
 
     public ServiceProxy(String service, String version) {
         this.serviceKey = ServiceFactory.getServiceKey(service, version);
@@ -33,7 +37,14 @@ public class ServiceProxy implements InvocationHandler {
         Trace.startRpc();
         ResultCode code = ResultCode.OK;
         try {
-            Client client = serviceDiscovery.get();
+            String target = RequestCtxUtil.getTargetServerIp();
+            Client client = null;
+            if (target != null) {
+                client = ClientFactoryProvider.get().create(Address.parse(target));
+            }
+            if (client == null) {
+                client = serviceDiscovery.get();
+            }
             if (client == null) {
                 throw new AddressNotFoundException(serviceKey);
             }
@@ -43,6 +54,9 @@ public class ServiceProxy implements InvocationHandler {
             request.setServiceKey(serviceKey);
             request.setMethod(method.getName());
             request.setArgTypes(ReflectUtils.getArgTypes(method.getParameterTypes()));
+            if (args == null) {
+                args = EMPTY;
+            }
             request.setArgs(args);
 
             TransportFuture future = TransportFuture.create(request);

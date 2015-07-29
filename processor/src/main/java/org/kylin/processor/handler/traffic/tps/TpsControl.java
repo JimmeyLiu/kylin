@@ -19,7 +19,7 @@ public class TpsControl {
 
     static {
         //get TPS control rule from config service
-        serviceRule.put("org.kylin.test.service.TestService:1.0.0", new TrafficControl(1, 2, 1000));
+//        serviceRule.put("org.kylin.test.service.TestService:1.0.0", new TrafficControl(1, 2, 1000));
     }
 
     public static boolean pass(Request request) {

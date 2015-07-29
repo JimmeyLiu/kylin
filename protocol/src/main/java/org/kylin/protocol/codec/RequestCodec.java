@@ -23,7 +23,7 @@ public class RequestCodec extends MessageCodec<Request> {
         writeBytesLength(out, methodBytes);
 
         byte[] types;
-        if (message.getArgTypes() != null) {
+        if (message.getArgTypes() != null && message.getArgTypes().length > 0) {
             types = SerializeFactory.serialize(message.getSerializeType(), StringUtils.join(message.getArgTypes(), ','));
         } else {
             types = EMPTY;
@@ -50,6 +50,9 @@ public class RequestCodec extends MessageCodec<Request> {
         return new Request(serializeType);
     }
 
+    static final String[] EMPTY_TYPES = new String[0];
+    static final Object[] EMPTY_ARGS = new Object[0];
+
     @SuppressWarnings("all")
     @Override
     protected void decodePayload(Request request, byte[] payload) throws Exception {
@@ -72,6 +75,9 @@ public class RequestCodec extends MessageCodec<Request> {
             }
             request.setArgTypes(argTypes);
             request.setArgs(args);
+        } else {
+            request.setArgTypes(EMPTY_TYPES);
+            request.setArgs(EMPTY_ARGS);
         }
 
         byte[] ctxBytes = readLengthBytes(data);

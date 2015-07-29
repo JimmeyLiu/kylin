@@ -13,6 +13,8 @@ public class RequestCtxUtil {
     public static String CLIENT_APP_NAME = "clientAppName";
 
     public static String CLIENT_IP = "clientIp";
+    public static String TARGET_SERVER_IP = "targetServerIP";
+
 
     public static String getClientAppName() {
         return get().get(CLIENT_APP_NAME);
@@ -33,6 +35,14 @@ public class RequestCtxUtil {
             threadLocal.set(map);
         }
         return map;
+    }
+
+    public static void setTargetServer(String address) {
+        get().put(TARGET_SERVER_IP, address);
+    }
+
+    public static String getTargetServerIp() {
+        return get().get(TARGET_SERVER_IP);
     }
 
     public static void putContext(Map<String, String> map) {
