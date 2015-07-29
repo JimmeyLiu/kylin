@@ -11,6 +11,9 @@ public enum StatusCode {
     METHOD_NOT_FOUND(4042, "Method Not Found"),
     TPS_LIMITED_DENY(5001, "TPS Limited"),
     WHITE_LIST_DENY(5002, "White List Deny"),
+    REST_BAD_REQUEST(7000, "Restful URI Error"),
+    REST_PARAM_ERROR(7001, "Restful Param Error"),
+    REST_ARGTYPE_ERROR(7001, "Restful ArgTypes Error"),
     //
     ;
     public int code;

@@ -366,6 +366,14 @@ public class ReflectUtils {
         return types;
     }
 
+    public static Type[] getTypes(String[] typeStrs) {
+        Type[] types = new Type[typeStrs.length];
+        for (int i = 0; i < typeStrs.length; i++) {
+            types[i] = desc2Class(typeStrs[i]);
+        }
+        return types;
+    }
+
     public static String[] getTypes(Object[] objects) {
         String[] types = new String[objects.length];
         for (int i = 0; i < objects.length; i++) {
@@ -760,5 +768,9 @@ public class ReflectUtils {
     }
 
     private ReflectUtils() {
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getDesc(int.class));
     }
 }

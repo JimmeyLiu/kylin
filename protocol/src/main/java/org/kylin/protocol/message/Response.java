@@ -34,6 +34,8 @@ public class Response extends Message {
         this.status = statusCode.code;
         if (statusCode != StatusCode.OK) {
             this.exception = statusCode.message;
+        } else {
+            this.exception = null;
         }
     }
 

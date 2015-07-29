@@ -13,7 +13,7 @@ public class Config {
         return Integer.getInteger("kylin.port", 18000);
     }
 
-    public static int getHttpPort() {
+    public static int getRestPort() {
         return getKylinPort() + 1;
     }
 

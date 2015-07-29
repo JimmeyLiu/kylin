@@ -1,12 +1,14 @@
 package org.kylin.processor;
 
+import org.kylin.common.log.RpcLogger;
+import org.kylin.common.util.Config;
+import org.kylin.common.util.IpUtils;
 import org.kylin.processor.handler.RPCProcessorImpl;
 import org.kylin.processor.service.ServiceBean;
 import org.kylin.processor.service.ServiceFactory;
 import org.kylin.processor.service.ServiceProxy;
-import org.kylin.common.log.RpcLogger;
-import org.kylin.common.util.Config;
-import org.kylin.common.util.IpUtils;
+import org.kylin.protocol.processor.RPCProcessor;
+import org.kylin.restful.RestfulServer;
 import org.kylin.spring.Consumer;
 import org.kylin.spring.Provider;
 import org.kylin.transport.netty.server.Console;
@@ -30,6 +32,12 @@ public class SpringBootstrap implements BeanPostProcessor, BeanFactoryPostProces
     private volatile AtomicBoolean inited = new AtomicBoolean(false);
 
     Logger logger = RpcLogger.getLogger();
+
+    RPCProcessor processor;
+
+    public SpringBootstrap() {
+        this.processor = new RPCProcessorImpl();
+    }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -67,8 +75,8 @@ public class SpringBootstrap implements BeanPostProcessor, BeanFactoryPostProces
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean.getClass().isAnnotationPresent(Provider.class)) {
             if (inited.compareAndSet(false, true)) {
-                NettyServer server = new NettyServer(new RPCProcessorImpl());
-                server.listen(IpUtils.getLocalIp(), Config.getKylinPort());
+                new NettyServer(processor).listen(IpUtils.getLocalIp(), Config.getKylinPort());
+                new RestfulServer(processor).listen(IpUtils.getLocalIp(), Config.getRestPort());
             }
             Type[] types = bean.getClass().getGenericInterfaces();
             if (types.length > 0) {

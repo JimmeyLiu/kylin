@@ -11,6 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestServiceImpl implements TestService {
     @Override
+    public ResultModel say() {
+        ResultModel resultModel = new ResultModel();
+        resultModel.setResult("和会话会话f");
+        return resultModel;
+    }
+
+    @Override
+    public long say(int i, long j) {
+        return i + j;
+    }
+
+    @Override
     public String say(String name, int age) {
         return "welcome " + name + " age " + age;
     }

@@ -5,7 +5,11 @@ package org.kylin.test.service;
  */
 public interface TestService {
 
-    public String say(String name,int age);
+    public ResultModel say();
+
+    public long say(int i, long j);
+
+    public String say(String name, int age);
 
     public String hello(String name);
 

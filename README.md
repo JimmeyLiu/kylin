@@ -15,8 +15,10 @@ kylin(麒麟)，一个跨语言的RPC框架
 4. common：公共类、方法
 5. address：服务注册、发现模块；如基于config系统、zk
 6. spring：和spring容器整合使用
-7. bootstrap：RPC初始化入口
+7. processor：RPC初始化入口
 8. test：测试工程模块
+9. config：配置接口
+10. restful：服务以HTTP REST方式提供出去
 
 
 使用方法

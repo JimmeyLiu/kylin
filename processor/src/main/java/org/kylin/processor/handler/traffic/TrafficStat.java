@@ -53,11 +53,13 @@ public class TrafficStat {
     public static String getRequestSignature(Request request) {
         StringBuffer sb = new StringBuffer();
         sb.append(request.getServiceKey()).append(" ").append(request.getMethod());
-        for (String s : request.getArgTypes()) {
-            if (s != null) {
-                sb.append("_").append(s.replace("/", "."));
-            } else {
-                sb.append("_null");
+        if (request.getArgTypes() != null) {
+            for (String s : request.getArgTypes()) {
+                if (s != null) {
+                    sb.append("_").append(s.replace("/", "."));
+                } else {
+                    sb.append("_null");
+                }
             }
         }
         sb.append(" ").append(RequestCtxUtil.getClientAppName());
