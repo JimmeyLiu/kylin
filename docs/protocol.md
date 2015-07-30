@@ -7,6 +7,6 @@ Kylin设计之初就是为了跨语言，主要的实现方式为
 
 ## 消息制
 
-Kylin的请求响应采用消息制，即一个 [Request](protocol/src/main/java/org/kylin/protocol/message/Request.java)得到一个[Response](protocol/src/main/java/org/kylin/protocol/message/Response.java)。
+Kylin的请求响应采用消息制，即一个 [Request](/protocol/src/main/java/org/kylin/protocol/message/Request.java)得到一个[Response](/protocol/src/main/java/org/kylin/protocol/message/Response.java)。
 
 
