@@ -45,11 +45,10 @@ Connection: Keep-Alive
 1. 在服务正常的情况下，所有的响应状态码都为 200 OK
 2. 响应内容类型为 application/json ，编码为 UTF-8
 3. 如果客户端支持KeepAlive，则服务端不会主动关闭连接
-4. 响应内容为RestResponse，字段说明如下
-
-    1 code：Kylin定义的状态码，详见附录
-    2 exception：如果code不为200，则这里显示错误信息
-    3 result：如果code为200，这里为服务返回结果
+4. 响应内容为RestResponse，字段说
+    1. code：Kylin定义的状态码，详见附录
+    2. exception：如果code不为200，则这里显示错误信息
+    3. result：如果code为200，这里为服务返回结果
 
 
 # 附录
