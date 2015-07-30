@@ -12,7 +12,7 @@ Kylin支持REST HTTP调用服务，主要场景有
 
 ```
 POST /RPC/{serviceKey}/{method}[/{argTypesSign}]
-
+[args JSONArray]
 ```
 
 格式说明：
@@ -21,6 +21,7 @@ POST /RPC/{serviceKey}/{method}[/{argTypesSign}]
 2. serviceKey为服务发布的key，如 org.kylin.test.service.TestService:1.0.0
 3. method为调用服务的方法名，如 say
 4. argTypesSign，参数类型签名，在无参方法时可以忽略；有参方法一定要有。用来准确定位到一个服务方法
+5. args JSONArray，参数值使用JSONArray在body中传递
 
 如下请求报文截图
 
