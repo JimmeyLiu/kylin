@@ -4,14 +4,13 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.kylin.address.Address;
 import org.kylin.transport.AbstractClientFactory;
 import org.kylin.transport.Client;
-import org.kylin.transport.netty.handler.BlockCodecHandler;
-import org.kylin.transport.netty.handler.MessageCodecHandler;
+import org.kylin.transport.netty.server.binary.BlockCodecHandler;
+import org.kylin.transport.netty.server.binary.MessageCodecHandler;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -32,7 +31,6 @@ public class NettyClientFactory extends AbstractClientFactory {
                     @Override
                     protected void initChannel(Channel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-//                        pipeline.addLast(new IdleStateHandler(0, 0, address.getIdleTimeout()));
                         pipeline.addLast(new BlockCodecHandler());
                         pipeline.addLast(new MessageCodecHandler());
                         pipeline.addLast(new MessageHandler(listeners));

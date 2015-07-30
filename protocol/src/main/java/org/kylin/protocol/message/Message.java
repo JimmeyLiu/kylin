@@ -13,7 +13,7 @@ public abstract class Message {
         }
     }
 
-    long mid;
+    int mid;
     MessageType type;
     int serializeType;
 
@@ -22,11 +22,11 @@ public abstract class Message {
         this.serializeType = serializeType;
     }
 
-    public long getMid() {
+    public int getMid() {
         return mid;
     }
 
-    public void setMid(long mid) {
+    public void setMid(int mid) {
         this.mid = mid;
     }
 

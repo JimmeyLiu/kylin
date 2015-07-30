@@ -20,7 +20,6 @@
         <module>processor</module>
         <module>console</module>
         <module>trace</module>
-        <module>restful</module>
         <module>config</module>
     </modules>
 

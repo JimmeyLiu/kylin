@@ -1,4 +1,4 @@
-package org.kylin.transport.netty.handler;
+package org.kylin.transport.netty.server.binary;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

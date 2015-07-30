@@ -63,7 +63,7 @@ public class Address {
             if (serialize != null) {
                 String[] types = StringUtils.split(serialize, ',');
             }
-            tmp.serializeType = 0;
+            tmp.serializeType = 1;
         }
         return tmp;
     }

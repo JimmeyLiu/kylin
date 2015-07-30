@@ -8,10 +8,10 @@ public class Head {
     int version;
     int type;
     int serializeType;
-    long mid;
+    int mid;
     int length;
 
-    public Head(int version, int type, int serializeType, long mid, int length) {
+    public Head(int version, int type, int serializeType, int mid, int length) {
         this.version = version;
         this.type = type;
         this.serializeType = serializeType;
@@ -43,11 +43,11 @@ public class Head {
         this.serializeType = serializeType;
     }
 
-    public long getMid() {
+    public int getMid() {
         return mid;
     }
 
-    public void setMid(long mid) {
+    public void setMid(int mid) {
         this.mid = mid;
     }
 

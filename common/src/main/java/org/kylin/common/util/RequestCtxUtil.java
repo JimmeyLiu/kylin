@@ -11,7 +11,6 @@ public class RequestCtxUtil {
     private static ThreadLocal<Map<String, String>> threadLocal = new ThreadLocal<Map<String, String>>();
 
     public static String CLIENT_APP_NAME = "clientAppName";
-
     public static String CLIENT_IP = "clientIp";
     public static String TARGET_SERVER_IP = "targetServerIP";
 

@@ -8,7 +8,6 @@ import org.kylin.processor.service.ServiceBean;
 import org.kylin.processor.service.ServiceFactory;
 import org.kylin.processor.service.ServiceProxy;
 import org.kylin.protocol.processor.RPCProcessor;
-import org.kylin.restful.RestfulServer;
 import org.kylin.spring.Consumer;
 import org.kylin.spring.Provider;
 import org.kylin.transport.netty.server.Console;
@@ -76,7 +75,7 @@ public class SpringBootstrap implements BeanPostProcessor, BeanFactoryPostProces
         if (bean.getClass().isAnnotationPresent(Provider.class)) {
             if (inited.compareAndSet(false, true)) {
                 new NettyServer(processor).listen(IpUtils.getLocalIp(), Config.getKylinPort());
-                new RestfulServer(processor).listen(IpUtils.getLocalIp(), Config.getRestPort());
+//                new RestfulServer(processor).listen(IpUtils.getLocalIp(), Config.getRestPort());
             }
             Type[] types = bean.getClass().getGenericInterfaces();
             if (types.length > 0) {

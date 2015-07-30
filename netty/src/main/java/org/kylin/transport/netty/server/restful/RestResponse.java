@@ -1,18 +1,18 @@
-package org.kylin.restful;
+package org.kylin.transport.netty.server.restful;
 
 /**
  * Created by jimmey on 15-7-29.
  */
-public class RpcResponse {
+public class RestResponse {
 
     int code;
     String exception;
     Object result;
 
-    public RpcResponse() {
+    public RestResponse() {
     }
 
-    public RpcResponse(int code, String exception, Object result) {
+    public RestResponse(int code, String exception, Object result) {
         this.code = code;
         this.exception = exception;
         this.result = result;

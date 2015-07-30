@@ -46,7 +46,7 @@ public class ServiceProxy implements InvocationHandler {
                 client = serviceDiscovery.get();
             }
             if (client == null) {
-                throw new AddressNotFoundException(serviceKey);
+                throw new KylinException(StatusCode.ADDRESS_NOT_FOUND.code, StatusCode.ADDRESS_NOT_FOUND.message);
             }
 
             Request request = new Request(client.address().getSerializeType());
@@ -58,7 +58,7 @@ public class ServiceProxy implements InvocationHandler {
                 args = EMPTY;
             }
             request.setArgs(args);
-
+            request.putContext("invoke-time", System.currentTimeMillis() + "");
             TransportFuture future = TransportFuture.create(request);
             client.doAsk(future);
             Response response = future.get();
@@ -75,6 +75,7 @@ public class ServiceProxy implements InvocationHandler {
             throw e;
         } finally {
             Trace.end(code);
+//            System.out.println("use " + (System.currentTimeMillis() - start));
         }
     }
 

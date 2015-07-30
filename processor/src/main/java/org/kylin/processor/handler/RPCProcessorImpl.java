@@ -1,7 +1,6 @@
 package org.kylin.processor.handler;
 
 import org.kylin.common.log.RpcLogger;
-import org.kylin.common.util.RequestCtxUtil;
 import org.kylin.processor.handler.traffic.TrafficHandler;
 import org.kylin.protocol.message.Request;
 import org.kylin.protocol.message.Response;
@@ -19,6 +18,7 @@ public class RPCProcessorImpl implements RPCProcessor {
 
     public RPCProcessorImpl() {
         handlers = new RequestHandler[]{
+                new AuthHandler(),//auth check
                 new TrafficHandler(),//tps control
                 new InvokeHandler()//real invoke
         };

@@ -1,4 +1,4 @@
-package org.kylin.transport.netty.handler;
+package org.kylin.transport.netty.server.binary;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;

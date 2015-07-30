@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MessageHandler extends ChannelDuplexHandler {
     Logger logger = RpcLogger.getLogger();
 
-    Map<Long, TransportFuture> pending = new HashMap<Long, TransportFuture>();
+    Map<Integer, TransportFuture> pending = new HashMap<Integer, TransportFuture>();
     Client.Listener[] listeners;
 
     public MessageHandler(Client.Listener... listeners) {

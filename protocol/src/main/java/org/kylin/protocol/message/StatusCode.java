@@ -5,8 +5,11 @@ package org.kylin.protocol.message;
  */
 public enum StatusCode {
     TRYING(0, "Trying"),
-    CLIENT_SEND_ERROR(100, "Client Send Error"),
+    ADDRESS_NOT_FOUND(100, "Address Not Found"),
+    CLIENT_SEND_ERROR(101, "Client Send Error"),
+    REQUEST_TIMEOUT(102, "Request Timeout"),
     OK(200, "OK"),
+    CLIENT_APP_REQUIRED(301, "Client AppName Required"),
     SERVER_ERROR(500, "Server Error"),
     SERVICE_NOT_FOUND(401, "Service Not Found"),
     METHOD_NOT_FOUND(402, "Method Not Found"),

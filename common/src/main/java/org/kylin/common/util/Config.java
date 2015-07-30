@@ -13,12 +13,8 @@ public class Config {
         return Integer.getInteger("kylin.port", 18000);
     }
 
-    public static int getRestPort() {
+    public static int getConsolePort() {
         return getKylinPort() + 1;
-    }
-
-    public static int getTelnetPort() {
-        return getKylinPort() + 2;
     }
 
     public static int getIoWorkers() {

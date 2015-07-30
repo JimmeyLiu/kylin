@@ -6,15 +6,11 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.kylin.common.log.RpcLogger;
 import org.kylin.common.util.Config;
 import org.kylin.protocol.processor.RPCProcessor;
 import org.kylin.transport.Server;
-import org.kylin.transport.netty.handler.BlockCodecHandler;
-import org.kylin.transport.netty.handler.MessageCodecHandler;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
@@ -47,14 +43,12 @@ public class NettyServer implements Server {
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)//
                 .childOption(ChannelOption.TCP_NODELAY, true)//
                 .childOption(ChannelOption.SO_REUSEADDR, true)
-                        // .childOption(ChannelOption.SO_KEEPALIVE, true)//
+                .childOption(ChannelOption.SO_KEEPALIVE, true)//
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-//                        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
-                        pipeline.addLast("codec", new BlockCodecHandler());
-                        pipeline.addLast("message", new MessageCodecHandler());
+                        pipeline.addLast("judge", new JudgeHandler());
                         pipeline.addLast("handler", new MessageHandler(processor));
                     }
                 });

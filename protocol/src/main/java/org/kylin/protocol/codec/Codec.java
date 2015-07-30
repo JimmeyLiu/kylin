@@ -7,7 +7,7 @@ public interface Codec {
 
     void encode(Block block, Output output);
 
-    void decode(Input input, Callback<Block> callback);
+    void decode(Input input, Callback<Block> callback) throws Exception;
 
     public interface Callback<T> {
         void on(T t);
