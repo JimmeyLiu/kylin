@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>org.kylin</groupId>
-            <artifactId>processor</artifactId>
+            <artifactId>bootstrap</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

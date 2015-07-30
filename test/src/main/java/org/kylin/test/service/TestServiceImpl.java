@@ -1,7 +1,6 @@
 package org.kylin.test.service;
 
-import org.kylin.common.util.RequestCtxUtil;
-import org.kylin.spring.Provider;
+import org.kylin.bootstrap.annotation.Provider;
 import org.springframework.stereotype.Component;
 
 /**

@@ -1,15 +1,15 @@
-package org.kylin.processor;
+package org.kylin.bootstrap;
 
+import org.kylin.bootstrap.annotation.Consumer;
+import org.kylin.bootstrap.annotation.Provider;
 import org.kylin.common.log.RpcLogger;
 import org.kylin.common.util.Config;
 import org.kylin.common.util.IpUtils;
-import org.kylin.processor.handler.RPCProcessorImpl;
+import org.kylin.processor.RPCProcessorImpl;
 import org.kylin.processor.service.ServiceBean;
 import org.kylin.processor.service.ServiceFactory;
 import org.kylin.processor.service.ServiceProxy;
 import org.kylin.protocol.processor.RPCProcessor;
-import org.kylin.spring.Consumer;
-import org.kylin.spring.Provider;
 import org.kylin.transport.netty.server.Console;
 import org.kylin.transport.netty.server.NettyServer;
 import org.slf4j.Logger;
@@ -75,7 +75,6 @@ public class SpringBootstrap implements BeanPostProcessor, BeanFactoryPostProces
         if (bean.getClass().isAnnotationPresent(Provider.class)) {
             if (inited.compareAndSet(false, true)) {
                 new NettyServer(processor).listen(IpUtils.getLocalIp(), Config.getKylinPort());
-//                new RestfulServer(processor).listen(IpUtils.getLocalIp(), Config.getRestPort());
             }
             Type[] types = bean.getClass().getGenericInterfaces();
             if (types.length > 0) {

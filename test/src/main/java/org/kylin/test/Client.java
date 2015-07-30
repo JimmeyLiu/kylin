@@ -1,10 +1,10 @@
 package org.kylin.test;
 
+import org.kylin.bootstrap.Kylin;
 import org.kylin.common.util.RequestCtxUtil;
-import org.kylin.spring.Consumer;
+import org.kylin.bootstrap.annotation.Consumer;
 import org.kylin.test.service.TestModel;
 import org.kylin.test.service.TestService;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,10 +33,14 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
         System.setProperty("kylin.appName", "TestClient2");
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("client.xml");
-        Thread.sleep(1000);
-        Client client = (Client) context.getBean("client");
+//        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("client.xml");
+//        Thread.sleep(1000);
+//        Client client = (Client) context.getBean("client");
+//        client.invoke();
+        Client client = new Client();
+        Kylin.consumer(client);
         client.invoke();
+
     }
 
 }

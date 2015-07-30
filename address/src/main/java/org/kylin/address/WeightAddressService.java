@@ -17,7 +17,7 @@ public abstract class WeightAddressService implements AddressService {
 
     @Override
     public void lookup(String serviceKey, final Callback callback) {
-        ConfigFactory.getConfig(serviceKey + "_Weight", new Listener() {
+        ConfigFactory.getConfig(serviceKey + "_WEIGHT", new Listener() {
             @Override
             public void on(String content) {
                 weightRule = JSON.parseObject(content, WeightRule.class);

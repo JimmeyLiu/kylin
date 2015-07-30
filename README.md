@@ -1,5 +1,5 @@
 
-kylin(麒麟)，一个跨语言的RPC框架
+Kylin(麒麟)，一个跨语言的RPC框架
 
 如何跨语言
 
@@ -18,7 +18,6 @@ kylin(麒麟)，一个跨语言的RPC框架
 7. processor：RPC初始化入口
 8. test：测试工程模块
 9. config：配置接口
-10. restful：服务以HTTP REST方式提供出去
 
 
 [更多文档](/docs)

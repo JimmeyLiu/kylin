@@ -39,7 +39,7 @@ public class LocalAddressService implements AddressService {
 
     @Override
     public int priority() {
-        return 0;
+        return 100;
     }
 
     Map<String, Long> modified = new ConcurrentHashMap<String, Long>();

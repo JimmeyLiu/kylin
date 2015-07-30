@@ -13,13 +13,11 @@
         <module>address</module>
         <module>common</module>
         <module>transport</module>
-        <module>spring</module>
+        <module>bootstrap</module>
         <module>test</module>
         <module>netty</module>
         <module>serialize</module>
         <module>processor</module>
-        <module>console</module>
-        <module>trace</module>
         <module>config</module>
     </modules>
 
