@@ -43,3 +43,49 @@ Kylin传输协议头为16字节，头格式如下
 +----+-+-+-+-+----+----+---...---+
 ```
 
+说明
+
+1. KLYN：前4个字节，协议MAGIC
+2. V：协议版本，目前为1
+3. T：消息类型，如Request、Response、Control，使用的是MessageType枚举的origin顺序
+4. S：序列化方式
+5. R：预留一个byte
+6. MID：消息ID，用于做Request和Response的关联
+7. LEN：后面payload的长度
+8. PAYLOAD：payload的具体内容，不同的消息类型不一样。详细分别看下面各个不同消息类型的payload格式
+
+### Request Payload
+
+```
++----+--...--+----+--...--+----+--...--+----+--....--+----+--....--+----+--....--+----+--...--+
+|SLEN|S_BYTES|MLEN|M_BYTES|TLEN|T_BYTES|A1_L|A1_BYTES|A2_L|A2_BYTES|An_L|An_BYTES|CLEN|C_BYTES|
++----+--...--+----+--...--+----+--...--+----+--....--+----+--....--+----+--....--+----+--...--+
+```
+
+说明
+
+1. SLEN、S_BYTES: serviceKey序列化后byte[]的长度及内容
+2. MLEN、M_BYTES: method序列化后byte[]的长度及内容
+3. TLEN、T_BYTES: 参数类型签名使用","拼接后，序列化后byte[]的长度及内容
+4. A1_L、A1_BYTES；A2_L、A2_BYTES；An_L、An_BYTES；: 从左到右参数1到n序列化后byte[]的长度及内容
+5. CLEN、C_BYTES: 请求Context序列化后byte[]的长度及内容
+
+
+### Response Payload
+
+```
++----+----+--...--+----+--...--+
+|CODE|RLEN|R_BYTES|ELEN|E_BYTES|
++----+----+--...--+----+--...--+
+```
+
+说明
+
+1. CODE：响应状态码，参考StatusCode.code说明
+2. RLEN、R_BYTES：请求结果result序列化后byte[]的长度及内容。如果无返回值或者异常了，则长度为0
+3. ELEN、E_BYTES：异常信息序列化后byte[]的长度及内容。如果没有异常，则长度为0
+
+### Control Payload
+
+待实现
+
