@@ -63,6 +63,7 @@ public class MessageHandler extends ChannelDuplexHandler {
 
     private void send(final ChannelHandlerContext ctx, final TransportFuture future, ChannelPromise promise) {
         Request request = future.getRequest();
+        //只在第一个请求将AppName传输到服务端
         if (HANDSHAKE.compareAndSet(false, true)) {
             request.putContext(RequestCtxUtil.CLIENT_APP_NAME, Config.getAppName());
         }
@@ -73,12 +74,8 @@ public class MessageHandler extends ChannelDuplexHandler {
                 if (channelFuture.isSuccess()) {
                     pending.put(req.getMid(), future);
                 } else {
-                    channelFuture.cause().printStackTrace();
                     Response response = Response.errorResponse(req.getSerializeType(), StatusCode.CLIENT_SEND_ERROR);
                     future.set(response);
-                    if (!ctx.channel().isActive()) {
-//                        factory.remove(ctx.channel());
-                    }
                 }
             }
         });

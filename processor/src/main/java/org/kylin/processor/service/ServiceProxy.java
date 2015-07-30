@@ -58,7 +58,6 @@ public class ServiceProxy implements InvocationHandler {
                 args = EMPTY;
             }
             request.setArgs(args);
-            request.putContext("invoke-time", System.currentTimeMillis() + "");
             TransportFuture future = TransportFuture.create(request);
             client.doAsk(future);
             Response response = future.get();

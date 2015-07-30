@@ -42,7 +42,7 @@ public class Console {
                         }
                     });
 
-            b.bind(Config.getConsolePort()).syncUninterruptibly();//.syncUninterruptibly().channel().closeFuture().syncUninterruptibly();
+            b.bind(Config.getConsolePort()).syncUninterruptibly();
         } catch (Exception e) {
         }
     }

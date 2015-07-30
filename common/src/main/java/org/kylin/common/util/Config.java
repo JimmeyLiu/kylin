@@ -6,7 +6,7 @@ package org.kylin.common.util;
 public class Config {
 
     public static String getAppName() {
-        return System.getProperty("kylin.appName", "UNKNOWN");
+        return System.getProperty("kylin.appName");
     }
 
     public static int getKylinPort() {
