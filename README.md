@@ -21,7 +21,10 @@ kylin(麒麟)，一个跨语言的RPC框架
 10. restful：服务以HTTP REST方式提供出去
 
 
-[点击更多文档](/docs)
+[更多文档](/docs)
 
-
-
+1. [快速入门](/docs/quikstart.md)
+2. [Kylin传输协议 KLTP](/docs/protocol.md)
+3. [Kylin REST支持](/docs/restful.md)
+4. [Kylin寻址](/docs/address.md)
+5. [Kylin流量控制](/docs/traffic.md)
