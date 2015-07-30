@@ -11,7 +11,6 @@ public class Request extends Message {
     String method;
     String[] argTypes;
     Object[] args;
-    Class<?> returnType;
     int timeout = 1000;
     Map<String, String> context;
 
@@ -49,14 +48,6 @@ public class Request extends Message {
 
     public void setArgs(Object[] args) {
         this.args = args;
-    }
-
-    public Class<?> getReturnType() {
-        return returnType;
-    }
-
-    public void setReturnType(Class<?> returnType) {
-        this.returnType = returnType;
     }
 
     public int getTimeout() {

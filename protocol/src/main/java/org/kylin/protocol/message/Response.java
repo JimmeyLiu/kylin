@@ -7,7 +7,6 @@ public class Response extends Message {
 
     int status;
     Object result;
-    Class<?> resultType;
     private byte[] resultBytes;
     String exception;
 
@@ -44,14 +43,6 @@ public class Response extends Message {
 
     public void setResult(Object result) {
         this.result = result;
-    }
-
-    public Class<?> getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(Class<?> resultType) {
-        this.resultType = resultType;
     }
 
     public byte[] getResultBytes() {

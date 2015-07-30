@@ -27,7 +27,6 @@ public class ResponseCodecTest {
         response.setStatus(200);
 //        response.setException("hello");
         response.setResult("fdsa");
-        response.setResultType(String.class);
     }
 
     /**

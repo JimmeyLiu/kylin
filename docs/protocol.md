@@ -1,4 +1,4 @@
-# Kylin Transport Protocol
+# Kylin Transport Protocol - KLTP
 
 Kylin设计之初就是为了跨语言，主要的实现方式为
 
@@ -39,13 +39,13 @@ Kylin传输协议头为16字节，头格式如下
 
 ```
 +----+-+-+-+-+----+----+---...---+
-|KLYN|V|T|S|R|MID |LEN | PAYLOAD |
+|KLTP|V|T|S|R|MID |LEN | PAYLOAD |
 +----+-+-+-+-+----+----+---...---+
 ```
 
 说明
 
-1. KLYN：前4个字节，协议MAGIC
+1. KLTP：前4个字节，协议MAGIC
 2. V：协议版本，目前为1
 3. T：消息类型，如Request、Response、Control，使用的是MessageType枚举的origin顺序
 4. S：序列化方式

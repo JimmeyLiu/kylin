@@ -11,6 +11,7 @@ import java.io.IOException;
  * Created by jimmey on 15-6-23.
  */
 public abstract class MessageCodec<T extends Message> {
+    public static int VERSION = 1;
     protected final byte[] EMPTY = new byte[0];
     static MessageCodec request;
     static MessageCodec response;
@@ -35,7 +36,7 @@ public abstract class MessageCodec<T extends Message> {
 
     public Block encode(T message) throws Exception {
         byte[] payload = encodePayload(message);
-        Head head = new Head(1, message.getType().ordinal(), message.getSerializeType(), message.getMid(), payload.length);
+        Head head = new Head(VERSION, message.getType().ordinal(), message.getSerializeType(), message.getMid(), payload.length);
         Block block = new Block();
         block.setHead(head);
         block.setPayload(payload);

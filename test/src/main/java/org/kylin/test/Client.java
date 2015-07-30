@@ -21,7 +21,7 @@ public class Client {
         testModel.setName("的撒范德萨发");
         testModel.setAge(1234324);
         testModel.setTime(1111111);
-        RequestCtxUtil.setTargetServer("10.1.141.108:18000?IDLE_TIMEOUT=60&CONNECT_TIMEOUT=1000&SERIALIZE=msgpack,json");
+        RequestCtxUtil.setTargetServer("10.1.155.152:18000?IDLE_TIMEOUT=60&CONNECT_TIMEOUT=1000&SERIALIZE=msgpack,json");
         for (int i = 0; i < 600; i++) {
             long start = System.currentTimeMillis();
             for (int j = 0; j < 1000; j++) {

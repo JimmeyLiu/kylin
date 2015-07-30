@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class BinaryCodec implements Codec {
 
     static final byte[] RESERVED = new byte[]{0};
-    public static final byte[] MAGIC = "KYLN".getBytes();
+    public static final byte[] MAGIC = "KLTP".getBytes();
     Block last = null;
     static final Exception BAD_PACKET = new Exception("Bad Kylin Packet");
 
