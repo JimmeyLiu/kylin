@@ -5,5 +5,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean class="org.kylin.bootstrap.SpringBootstrap"/>
+
+    <bean class="org.kylin.bootstrap.bean.ConsumerBean">
+        <property name="service" value="org.kylin.test.service.TestService"/>
+        <property name="version" value="1.0.0"/>
+        <property name="target"
+                  value="10.1.155.152:18000?IDLE_TIMEOUT=60&amp;CONNECT_TIMEOUT=1000&amp;SERIALIZE=msgpack,json"/>
+    </bean>
+
     <bean name="client" class="org.kylin.test.Client"/>
 </beans>

@@ -44,7 +44,7 @@ public class ServiceFactory {
             try {
                 object = consumerServices.get(key);
                 if (object == null) {
-                    object = Proxy.newProxyInstance(ServiceFactory.class.getClassLoader(), new Class[]{service}, new ServiceProxy(service.getName(), version));
+                    object = createProxy(service, new ServiceProxy(service.getName(), version));
                     consumerServices.put(key, object);
                 }
             } finally {
@@ -52,6 +52,10 @@ public class ServiceFactory {
             }
         }
         return (T) object;
+    }
+
+    public static Object createProxy(Class<?> service, ServiceProxy proxy) {
+        return Proxy.newProxyInstance(ServiceFactory.class.getClassLoader(), new Class[]{service}, proxy);
     }
 
     public static void putConsumerService(Class<?> service, String version, Object object) {

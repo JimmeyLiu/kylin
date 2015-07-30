@@ -1,17 +1,13 @@
-package org.kylin.processor.service;
-
-import java.util.Map;
+package org.kylin.bootstrap.bean;
 
 /**
  * Created by jimmey on 15-7-17.
  */
-public class ServiceBean {
-
+public class ProviderBean {
 
     private String service;
     private String version;
     private Object target;
-    private Map<String, Integer> methodTimeout;
 
     public String getService() {
         return service;
@@ -27,14 +23,6 @@ public class ServiceBean {
 
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public Map<String, Integer> getMethodTimeout() {
-        return methodTimeout;
-    }
-
-    public void setMethodTimeout(Map<String, Integer> methodTimeout) {
-        this.methodTimeout = methodTimeout;
     }
 
     public Object getTarget() {

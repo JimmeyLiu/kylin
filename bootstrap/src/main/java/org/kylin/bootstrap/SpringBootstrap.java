@@ -2,11 +2,12 @@ package org.kylin.bootstrap;
 
 import org.kylin.bootstrap.annotation.Consumer;
 import org.kylin.bootstrap.annotation.Provider;
+import org.kylin.bootstrap.bean.ConsumerBean;
+import org.kylin.bootstrap.bean.ProviderBean;
 import org.kylin.common.log.RpcLogger;
 import org.kylin.common.util.Config;
 import org.kylin.common.util.IpUtils;
 import org.kylin.processor.RPCProcessorImpl;
-import org.kylin.processor.service.ServiceBean;
 import org.kylin.processor.service.ServiceFactory;
 import org.kylin.processor.service.ServiceProxy;
 import org.kylin.protocol.processor.RPCProcessor;
@@ -14,6 +15,8 @@ import org.kylin.transport.netty.server.Console;
 import org.kylin.transport.netty.server.NettyServer;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -40,23 +43,28 @@ public class SpringBootstrap implements BeanPostProcessor, BeanFactoryPostProces
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        Map map = beanFactory.getBeansOfType(ServiceBean.class);
+        Map map = beanFactory.getBeansOfType(ProviderBean.class);
         for (Object object : map.values()) {
-            ServiceBean bean = (ServiceBean) object;
+            ProviderBean bean = (ProviderBean) object;
             try {
                 Class<?> clazz = Class.forName(bean.getService());
-                if (bean.getTarget() != null) {
-                    ServiceFactory.register(clazz, bean.getVersion(), bean.getTarget());
-                } else {
-                    ServiceProxy proxy = new ServiceProxy(bean.getService(), bean.getVersion());
-                    try {
-                        ServiceFactory.putConsumerService(clazz, bean.getVersion(), proxy);
-                    } catch (Exception e) {
-                        logger.error("get class error {}", bean.getService());
-                    }
-                }
-            } catch (ClassNotFoundException e) {
-                RpcLogger.getLogger().error("service class not found " + bean.getService());
+                ServiceFactory.register(clazz, bean.getVersion(), bean.getTarget());
+            } catch (Exception e) {
+                logger.error("service class not found " + bean.getService(), e);
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+
+        map = beanFactory.getBeansOfType(ConsumerBean.class);
+        for (Object key : map.keySet()) {
+            ConsumerBean bean = (ConsumerBean) map.get(key);
+            try {
+                Class<?> clazz = Class.forName(bean.getService());
+                ServiceProxy proxy = new ServiceProxy(bean.getService(), bean.getVersion(), bean.getTarget());
+                Object p = ServiceFactory.createProxy(clazz, proxy);
+                ServiceFactory.putConsumerService(clazz, bean.getVersion(), p);
+            } catch (Exception e) {
+                logger.error("service class not found " + bean.getService(), e);
                 throw new RuntimeException(e.getMessage());
             }
         }
@@ -94,7 +102,7 @@ public class SpringBootstrap implements BeanPostProcessor, BeanFactoryPostProces
                 Object object = ServiceFactory.getService(field.getType(), consumer.version());
                 field.set(bean, object);
             } catch (Exception e) {
-                logger.error("set consumer error {}", field.getType());
+                logger.error("set consumer error", e);
             }
         }
         return bean;

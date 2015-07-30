@@ -4,6 +4,12 @@ package org.kylin.common.util;
  * Created by jimmey on 15-7-28.
  */
 public class Config {
+    private static boolean online;
+
+    static {
+        //默认为online环境
+        online = Boolean.valueOf(System.getProperty("kylin.online", "true"));
+    }
 
     public static String getAppName() {
         return System.getProperty("kylin.appName");
@@ -15,6 +21,11 @@ public class Config {
 
     public static int getConsolePort() {
         return getKylinPort() + 1;
+    }
+
+
+    public static boolean isOnline() {
+        return online;
     }
 
     public static int getIoWorkers() {

@@ -1,6 +1,7 @@
 package org.kylin.processor.service;
 
 import org.kylin.address.Address;
+import org.kylin.common.util.Config;
 import org.kylin.common.util.ReflectUtils;
 import org.kylin.common.util.RequestCtxUtil;
 import org.kylin.protocol.message.Mid;
@@ -21,21 +22,34 @@ import java.lang.reflect.Method;
 public class ServiceProxy implements InvocationHandler {
 
     String serviceKey;
+    String target;
     ServiceDiscovery serviceDiscovery;
     static final Object[] EMPTY = new Object[0];
 
+
     public ServiceProxy(String service, String version) {
+        this(service, version, null);
+    }
+
+    public ServiceProxy(String service, String version, String target) {
         this.serviceKey = ServiceFactory.getServiceKey(service, version);
+        this.target = target;
         this.serviceDiscovery = new ServiceDiscovery(serviceKey);
     }
 
     @Override
     public Object invoke(Object proxy, final Method method, Object[] args) throws Throwable {
-        String target = RequestCtxUtil.getTargetServerIp();
         Client client = null;
-        if (target != null) {
-            client = ClientFactoryProvider.get().create(Address.parse(target));
+
+        if (!Config.isOnline()) {//只在线下环境支持指定调用
+            if (target == null) {
+                target = RequestCtxUtil.getTargetServerIp();
+            }
+            if (target != null) {
+                client = ClientFactoryProvider.get().create(Address.parse(target));
+            }
         }
+
         if (client == null) {
             client = serviceDiscovery.get();
         }
